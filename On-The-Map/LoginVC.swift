@@ -102,6 +102,8 @@ class LoginVC: UIViewController {
         
         ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
             
+            self.activityIndicator.stopAnimating()
+            
             if successfulOutcome {
                 
                 // Segue to the next view controller
@@ -112,7 +114,7 @@ class LoginVC: UIViewController {
                 }
                 
             } else {
-                self.activityIndicator.stopAnimating()
+                
                 self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
             }
             
