@@ -41,20 +41,29 @@ class InputVC: UIViewController {
         
         locationTextField.delegate = locationTextDelegate
         
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        
         disableUI()
         showLoadingIndicator()
+        
+        // TODO: Create a function that the map,table, and input views can all use to see if user data needs to be loaded.
+        // UdacityClient.sharedInstance().ensureUserNameKnown()
         
         if DataService.instance.userNameKnown() {
             self.activityIndicator.stopAnimating()
             self.enableUI()
         } else {
             
-            UdacityClient.sharedInstance().getUserName() { (error) in
+            UdacityClient.sharedInstance().getUserName() { (error, errorDesc) in
                 
                 self.activityIndicator.stopAnimating()
                 self.enableUI()
                 
-                if error == nil {
+                if !error {
                     DataService.instance.setUserNameKnown()
                 }                
             }
@@ -162,6 +171,7 @@ class InputVC: UIViewController {
         
     }
     
+    // TODO: Deprecated?
     private func showLoadingIndicator() {
         
         activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))

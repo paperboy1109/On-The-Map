@@ -47,6 +47,8 @@ class MapVC: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        
+        
         map.addAnnotations(mapAnnotations)
         
     }

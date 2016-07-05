@@ -36,7 +36,7 @@ class LoginVC: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         activityIndicator.stopAnimating()
-        enableUI()
+        //enableUI()
         
     }
     
@@ -62,25 +62,41 @@ class LoginVC: UIViewController {
             disableUI()
             showLoadingIndicator()
             
-            UdacityClient.sharedInstance().attemptLogin(emailTextField.text!, password: passwordTextField.text!) { (result, error) in
+            UdacityClient.sharedInstance().attemptLogin(emailTextField.text!, password: passwordTextField.text!) { (result, error, errorDesc) in
                 
-                self.activityIndicator.stopAnimating()
-                
-                if let validAccount = result as? Bool {
-                    if validAccount {
-                        self.allowLogin()
-                    } else {
-                        performUIUpdatesOnMain(){
-                            self.enableUI()
-                        }
-                        self.showErrorAlert("Login failed", alertDescription: "User name or password is incorrect.")
-                    }
-                } else {
-                    performUIUpdatesOnMain(){
-                        self.enableUI()
-                    }
-                    self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                performUIUpdatesOnMain {
+                    self.activityIndicator.stopAnimating()
+                    
+                    //self.enableUI()
                 }
+                
+                if !error {
+                    self.allowLogin()
+                } else {
+                    performUIUpdatesOnMain {
+                        self.showErrorAlert("Login failed", alertDescription: errorDesc)
+                    }
+                }
+                
+                
+                /*
+                 if let validAccount = error as? Bool {
+                 if validAccount {
+                 self.allowLogin()
+                 } else {
+                 performUIUpdatesOnMain(){
+                 self.enableUI()
+                 }
+                 self.showErrorAlert("Login failed", alertDescription: "User name or password is incorrect.")
+                 }
+                 } else {
+                 performUIUpdatesOnMain(){
+                 self.enableUI()
+                 }
+                 self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                 } */
+                
+                
             }
         }
     }
@@ -94,20 +110,22 @@ class LoginVC: UIViewController {
     @IBAction func loginWithFacebookTapped(sender: AnyObject) {
         showErrorAlert("Not available", alertDescription: "This feature will be implemented soon.  Stay tuned!")
     }
+    
     // MARK: - Helpers
     
     private func allowLogin() {
         
-        showLoadingIndicator()
-        
         ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
             
-            self.activityIndicator.stopAnimating()
+            performUIUpdatesOnMain {
+                self.activityIndicator.stopAnimating()
+            }
             
             if successfulOutcome {
                 
                 // Segue to the next view controller
                 performUIUpdatesOnMain {
+                    self.disableUI()
                     let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
                     self.presentViewController(tabView, animated: true, completion: nil)
                     self.activityIndicator.stopAnimating()
@@ -115,7 +133,9 @@ class LoginVC: UIViewController {
                 
             } else {
                 
-                self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                performUIUpdatesOnMain() {
+                    self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                }
             }
             
         }
@@ -131,9 +151,9 @@ class LoginVC: UIViewController {
             // The alert view will be dismissed when the user tapps 'OK' so nothing else needs to be done
         }) )
         
-        performUIUpdatesOnMain() {
-            self.presentViewController(alertView, animated: true, completion: nil)
-        }
+        self.enableUI()
+        
+        self.presentViewController(alertView, animated: true, completion: nil)
     }
     
     private func disableUI() {
@@ -173,9 +193,9 @@ class LoginVC: UIViewController {
         activityIndicator.hidesWhenStopped = true
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         view.addSubview(activityIndicator)
-        performUIUpdatesOnMain() {
-            self.activityIndicator.startAnimating()
-        }
+        
+        self.activityIndicator.startAnimating()
+        
         
     }
     
