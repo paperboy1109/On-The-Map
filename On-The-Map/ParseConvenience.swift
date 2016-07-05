@@ -13,10 +13,10 @@ import MapKit
 
 extension ParseClient {
     
-    
+    /*
     func getStudentInfo(completionHandlerForStudentInfo: (result: [StudentInformation]?, error: NSError?) -> Void) {
         
-    }
+    } */
     
     
     func postToServer(newStudentCoordinates: CLLocationCoordinate2D, newStudentLocationName: String, completionHandlerForPosting: (result: AnyObject?, error: NSError?) -> Void) {
@@ -74,6 +74,9 @@ extension ParseClient {
                 // (studentInfo will be an array of StudentInformation objects)
                 let studentInfo = StudentInformation.studentInfoFromResults(apiData)
                 DataService.instance.updateParseData(studentInfo)
+                
+                // Reverse the order of the data 
+                DataService.instance.reverseDataOrder()
                 
             } else {
                 print("Failed to get data from the parsed result")

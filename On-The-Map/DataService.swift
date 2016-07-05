@@ -94,5 +94,9 @@ class DataService {
         return _studentLink
     }
     
+    func reverseDataOrder() {
+        _loadedStudentInfo = _loadedStudentInfo.reverse()
+    }
+    
     
 }
