@@ -22,7 +22,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ogo-DV-TMB">
                                 <rect key="frame" x="20" y="55" width="560" height="527"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Udacity_Logo_White" translatesAutoresizingMaskIntoConstraints="NO" id="3rS-nl-fKI">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Udacity_Logo_White" translatesAutoresizingMaskIntoConstraints="NO" id="3rS-nl-fKI">
                                         <rect key="frame" x="88" y="0.0" width="385" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="120" id="O8U-Vs-cth"/>
@@ -199,14 +199,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4Z8-CC-sw0">
-                        <barButtonItem key="leftBarButtonItem" image="pin" id="Oxd-d3-nqU">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="Oxd-d3-nqU">
                             <connections>
-                                <action selector="pinTapped:" destination="JOH-vD-BNu" id="RN6-Fj-1uY"/>
+                                <action selector="logoutTapped:" destination="JOH-vD-BNu" id="0FE-9t-XoS"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="refresh" id="c6X-8D-C6g">
+                        <barButtonItem key="rightBarButtonItem" image="pin" style="done" id="c6X-8D-C6g">
                             <connections>
-                                <action selector="logoutTapped:" destination="JOH-vD-BNu" id="59c-xq-sLj"/>
+                                <action selector="pinTapped:" destination="JOH-vD-BNu" id="TVu-Nj-wAg"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -278,14 +278,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="T5I-yP-tBR">
-                        <barButtonItem key="leftBarButtonItem" image="pin" id="kzk-yh-fCa">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="kzk-yh-fCa">
                             <connections>
-                                <action selector="pinTapped:" destination="XAl-pS-bfJ" id="j94-CK-n9b"/>
+                                <action selector="logoutTapped:" destination="XAl-pS-bfJ" id="bJ1-tZ-Adh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="jjf-Dm-Cxw">
+                        <barButtonItem key="rightBarButtonItem" image="pin" id="jjf-Dm-Cxw">
                             <connections>
-                                <action selector="logoutTapped:" destination="XAl-pS-bfJ" id="het-QR-cbl"/>
+                                <action selector="pinTapped:" destination="XAl-pS-bfJ" id="0qQ-U7-kFv"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -540,6 +540,6 @@
         <image name="pin" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Nqw-sb-1BN"/>
+        <segue reference="Kl8-wp-89S"/>
     </inferredMetricsTieBreakers>
 </document>
