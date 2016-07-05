@@ -13,25 +13,13 @@ import MapKit
 
 extension ParseClient {
     
-    /*
-    func getStudentInfo(completionHandlerForStudentInfo: (result: [StudentInformation]?, error: NSError?) -> Void) {
-        
-    } */
-    
-    
     func postToServer(newStudentCoordinates: CLLocationCoordinate2D, newStudentLocationName: String, completionHandlerForPosting: (result: AnyObject?, error: NSError?) -> Void) {
         
         /* Specify parameters, method, and HTTP body */
         
         let urlParameters = [String: AnyObject]()
         let mutableMethod: String = Methods.Method_STUDENT_LOCATION
-        //let jsonBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"Steve\", \"lastName\": \"Gibson\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": \(newStudentCoordinates.latitude), \"longitude\": \(newStudentCoordinates.longitude)}"
         let jsonBody = "{\"uniqueKey\": \"\(DataService.instance.getStudentID())\", \"firstName\": \"\(DataService.instance.getUserFirstName())\", \"lastName\": \"\(DataService.instance.getUserLastName())\",\"mapString\": \"\(newStudentLocationName)\", \"mediaURL\": \"\(DataService.instance.getStudentLink())\",\"latitude\": \(newStudentCoordinates.latitude), \"longitude\": \(newStudentCoordinates.longitude)}"
-        
-        
-        
-        print("(postToServer) Here is jsonBody ")
-        print(jsonBody)
         
         /* Make the request */
         taskForPOSTMethod(mutableMethod, parameters: urlParameters,jsonBody: jsonBody) { (results, error) in
@@ -46,8 +34,10 @@ extension ParseClient {
                     
                     
                     // For debugging
+                    /*
                     print("\n(see postToServer func definition) Here is 'results' ")
                     print(results)
+                    */
                     
                     completionHandlerForPosting(result: postResult, error: nil)
 
@@ -75,7 +65,7 @@ extension ParseClient {
                 let studentInfo = StudentInformation.studentInfoFromResults(apiData)
                 DataService.instance.updateParseData(studentInfo)
                 
-                // Reverse the order of the data if needed
+                // Reverse the order of the data (if needed)
                 //DataService.instance.reverseDataOrder()
                 
             } else {

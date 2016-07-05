@@ -41,7 +41,7 @@ extension ParseClient {
     // MARK: - Parameter Values
     struct ParameterValues {
         static let StudentInfoLimit = "100"
-        static let StudentInfoOrder = "updatedAt"//"-updatedAt"
+        static let StudentInfoOrder = "-updatedAt"
     }
     
     // MARK: - JSON Response Keys
@@ -57,12 +57,13 @@ extension ParseClient {
     }
     
     // MARK: UI
+    /*
     struct UI {
         static let LoginColorTop = UIColor(red: 0.345, green: 0.839, blue: 0.988, alpha: 1.0).CGColor
         static let LoginColorBottom = UIColor(red: 0.023, green: 0.569, blue: 0.910, alpha: 1.0).CGColor
         static let GreyColor = UIColor(red: 0.702, green: 0.863, blue: 0.929, alpha:1.0)
         static let BlueColor = UIColor(red: 0.0, green:0.502, blue:0.839, alpha: 1.0)
-    }
+    } */
     
     
 }
