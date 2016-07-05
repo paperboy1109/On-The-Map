@@ -36,16 +36,22 @@ extension ParseClient {
         /* Make the request */
         taskForPOSTMethod(mutableMethod, parameters: urlParameters,jsonBody: jsonBody) { (results, error) in
             
-            // For debugging
-            print("\n(see postToServer func definition) Here is 'results' ")
-            print(results)
+            
             
             /* Send the desired value(s) to completion handler */
             if let error = error {
                 completionHandlerForPosting(result: nil, error: error)
             } else {
                 if let postResult = results["objectId"] {
+                    
+                    
+                    // For debugging
+                    print("\n(see postToServer func definition) Here is 'results' ")
+                    print(results)
+                    
                     completionHandlerForPosting(result: postResult, error: nil)
+
+                    
                 } else {
                     completionHandlerForPosting(result: nil, error: NSError(domain: "postToServer parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToServer"]))
                 }

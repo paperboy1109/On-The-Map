@@ -11,7 +11,7 @@ import UIKit
 class TableVC: UIViewController {
     
     // MARK: - Properties
-    var studentInfo: [StudentInformation] = [StudentInformation]()
+    //var studentInfo: [StudentInformation] = [StudentInformation]()
     
     // MARK: - Outlets
     @IBOutlet var parseDataTableView: UITableView!

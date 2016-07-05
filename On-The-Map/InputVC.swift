@@ -213,5 +213,21 @@ class InputVC: UIViewController {
         setPlaceholderText(locationTextField, initialText: "Enter Your Location Here")
     }
     
+    /* Add code to control the keyboard */
+    
+    
+    // Close keyboard by tapping outside
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // Close the keyboard by using the button on the keyboard
+    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+        
+        textField.resignFirstResponder()
+        
+        return true
+    }
+    
     
 }

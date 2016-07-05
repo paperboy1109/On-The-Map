@@ -18,6 +18,8 @@ class ShareLinkVC: UIViewController {
     
     var linkTextDelegate = UserInfoTextDelegate()
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
     let mapSpan:MKCoordinateSpan = MKCoordinateSpanMake(10 , 10)
     
     let linkTextAttributes = [
@@ -53,6 +55,8 @@ class ShareLinkVC: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        //For debugging only:
         print("(ShareLinkVC) Here is 'studentStudyLocation': \(studentStudyLocation)")
     }
     
@@ -74,10 +78,16 @@ class ShareLinkVC: UIViewController {
             DataService.instance.setStudentLink("")
         }
         
+        showLoadingIndicator()
+        disableUI()
+        
         ParseClient.sharedInstance().postToServer(studentStudyLocation, newStudentLocationName: studentStudyLocationName) { (result, error) in
             
             guard (error == nil) else {
                 print("There was an error with your POST request: \(error)")
+                performUIUpdatesOnMain {
+                        self.activityIndicator.stopAnimating()
+                }
                 self.showErrorAlert("Data failed to upload", alertDescription: "Please try again later.")
                 return
             }
@@ -90,6 +100,7 @@ class ShareLinkVC: UIViewController {
             DataService.instance.studentInfoIsOutdated()
             
             performUIUpdatesOnMain {
+                self.activityIndicator.stopAnimating()
                 let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
                 self.presentViewController(tabView, animated: true, completion: nil)
             }
@@ -107,7 +118,7 @@ class ShareLinkVC: UIViewController {
         
     }
     
-    private func showErrorAlert(alertTitle: String, alertDescription: String) {
+    func showErrorAlert(alertTitle: String, alertDescription: String) {
         
         let alertView = UIAlertController(title: "\(alertTitle)", message: "\(alertDescription)", preferredStyle: UIAlertControllerStyle.Alert)
         alertView.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) in
@@ -115,6 +126,46 @@ class ShareLinkVC: UIViewController {
         }) )
         
         self.presentViewController(alertView, animated: true, completion: nil)
+    }
+    
+    func showLoadingIndicator() {
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        
+        self.activityIndicator.startAnimating()
+        
+    }
+    
+    func disableUI() {
+        
+        postDataBtn.hidden = true
+        postDataBtn.enabled = false
+        
+        linkTextField.hidden = true
+        linkTextField.enabled = false
+        
+        newLocationMap.alpha = 0.5
+        
+    }
+    
+    /* Add code to control the keyboard */
+    
+    
+    // Close keyboard by tapping outside
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // Close the keyboard by using the button on the keyboard
+    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+        
+        textField.resignFirstResponder()
+        
+        return true
     }
     
     

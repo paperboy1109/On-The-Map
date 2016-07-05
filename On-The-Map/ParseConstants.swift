@@ -41,7 +41,7 @@ extension ParseClient {
     // MARK: - Parameter Values
     struct ParameterValues {
         static let StudentInfoLimit = "100"
-        static let StudentInfoOrder = "-updatedAt"
+        static let StudentInfoOrder = "updatedAt"//"-updatedAt"
     }
     
     // MARK: - JSON Response Keys
