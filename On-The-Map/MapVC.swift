@@ -15,7 +15,7 @@ class MapVC: UIViewController {
     
     let mapSpan:MKCoordinateSpan = MKCoordinateSpanMake(10 , 10)
     
-    var studentInfo: [StudentInformation] = [StudentInformation]()
+    // var studentInfo: [StudentInformation] = [StudentInformation]()
     
     var mapAnnotations = [MKPointAnnotation]()
     
@@ -29,9 +29,10 @@ class MapVC: UIViewController {
         
         map.delegate = self
         
-        studentInfo = DataService.instance.loadedStudentInfo
+        // studentInfo = DataService.instance.loadedStudentInfo
         
-        for item in self.studentInfo {
+        //for item in self.studentInfo {
+        for item in DataService.instance.loadedStudentInfo {
             let newAnnotation:MKPointAnnotation = MKPointAnnotation()
             newAnnotation.coordinate = item.location!
             newAnnotation.title = item.name!

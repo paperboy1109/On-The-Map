@@ -23,7 +23,7 @@ class TableVC: UIViewController {
         
         parseDataTableView.delegate = self
         
-        studentInfo = DataService.instance.loadedStudentInfo
+        // studentInfo = DataService.instance.loadedStudentInfo
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -75,7 +75,8 @@ extension TableVC: UITableViewDelegate, UITableViewDataSource {
         
         /* Get cell type */
         let cellReuseIdentifier = "ParseDataTableViewCell"
-        let individualInfo = studentInfo[indexPath.row]
+        //let individualInfo = studentInfo[indexPath.row]
+        let individualInfo = DataService.instance.loadedStudentInfo[indexPath.row]
         
         if var cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell! {
             
@@ -97,7 +98,8 @@ extension TableVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentInfo.count
+        //return studentInfo.count
+        return DataService.instance.loadedStudentInfo.count
     }
     
     
