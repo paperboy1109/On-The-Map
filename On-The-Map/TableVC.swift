@@ -11,7 +11,8 @@ import UIKit
 class TableVC: UIViewController {
     
     // MARK: - Properties
-    //var studentInfo: [StudentInformation] = [StudentInformation]()
+    
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     // MARK: - Outlets
     @IBOutlet var parseDataTableView: UITableView!
@@ -30,6 +31,35 @@ class TableVC: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.navigationBarHidden = false
+        
+        showLoadingIndicator()
+        
+        if DataService.instance.dataNeedsUpdate {
+            
+            ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
+                
+                performUIUpdatesOnMain {
+                    self.activityIndicator.stopAnimating()
+                }
+                
+                if successfulOutcome {
+                    
+                    performUIUpdatesOnMain() {
+                        self.showErrorAlert("Data updated!", alertDescription: "Sorry for the wait, but you now have the most recent data.")
+                    }
+                    
+                    
+                } else {
+                    
+                    performUIUpdatesOnMain() {
+                        self.showErrorAlert("Data update failed", alertDescription: "Data shown in the table may not be completely up-to-date. Try logging in later.")
+                    }
+                }
+                
+            }
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
         
         parseDataTableView.reloadData()
     }
@@ -50,6 +80,7 @@ class TableVC: UIViewController {
                 
                 DataService.instance.setUserNameUnknown()
                 DataService.instance.resetStudentInfo()
+                DataService.instance.studentInfoIsOutdated()
                 
                 performUIUpdatesOnMain {
                     let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginVC") as! LoginVC
@@ -65,6 +96,29 @@ class TableVC: UIViewController {
             }
         }
         
+    }
+    
+    // MARK: - Helpers
+    
+    private func showLoadingIndicator() {
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        
+        self.activityIndicator.startAnimating()
+        
+    }
+    
+    private func showErrorAlert(alertTitle: String, alertDescription: String) {
+        
+        let alertView = UIAlertController(title: "\(alertTitle)", message: "\(alertDescription)", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertView.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        
+        self.presentViewController(alertView, animated: true, completion: nil)
     }
     
 }

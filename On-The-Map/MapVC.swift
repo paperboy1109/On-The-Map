@@ -106,6 +106,7 @@ class MapVC: UIViewController {
                 
                 DataService.instance.setUserNameUnknown()
                 DataService.instance.resetStudentInfo()
+                DataService.instance.studentInfoIsOutdated()
                 
                 performUIUpdatesOnMain {
                     let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginVC") as! LoginVC

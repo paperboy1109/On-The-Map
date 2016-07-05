@@ -86,20 +86,19 @@ class ShareLinkVC: UIViewController {
             guard (error == nil) else {
                 print("There was an error with your POST request: \(error)")
                 performUIUpdatesOnMain {
-                        self.activityIndicator.stopAnimating()
+                    self.activityIndicator.stopAnimating()
+                    self.showErrorAlert("Data failed to upload", alertDescription: "Please try again later.")
                 }
-                self.showErrorAlert("Data failed to upload", alertDescription: "Please try again later.")
                 return
             }
             
             // View the result for debugging purposes
             print("(Closure of postToServer) Here is 'result' :")
             print(result)
-            
-            // Indicate that the singleton needs updating
-            DataService.instance.studentInfoIsOutdated()
-            
+                        
             performUIUpdatesOnMain {
+                // Indicate that the singleton needs updating
+                DataService.instance.studentInfoIsOutdated()
                 self.activityIndicator.stopAnimating()
                 let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
                 self.presentViewController(tabView, animated: true, completion: nil)

@@ -65,7 +65,7 @@ extension ParseClient {
         
         var urlParameters = [String: AnyObject]()
         urlParameters[ParseClient.ParameterKeys.StudentInfoLimit] = ParseClient.ParameterValues.StudentInfoLimit
-        urlParameters[ParseClient.ParameterKeys.StudentInfoOrder] = ParseClient.ParameterKeys.StudentInfoOrder
+        urlParameters[ParseClient.ParameterKeys.StudentInfoOrder] = ParseClient.ParameterValues.StudentInfoOrder
         
         ParseClient.sharedInstance().taskForGETMethod(mutableMethod, parameters: urlParameters) { (results, error) in
             
@@ -75,8 +75,8 @@ extension ParseClient {
                 let studentInfo = StudentInformation.studentInfoFromResults(apiData)
                 DataService.instance.updateParseData(studentInfo)
                 
-                // Reverse the order of the data 
-                DataService.instance.reverseDataOrder()
+                // Reverse the order of the data if needed
+                //DataService.instance.reverseDataOrder()
                 
             } else {
                 print("Failed to get data from the parsed result")
