@@ -19,6 +19,8 @@ class MapVC: UIViewController {
     
     var mapAnnotations = [MKPointAnnotation]()
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
     // MARK: - Outlets
     @IBOutlet var map: MKMapView!
     
@@ -47,9 +49,37 @@ class MapVC: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        showLoadingIndicator()
         
-        
-        map.addAnnotations(mapAnnotations)
+        if DataService.instance.dataNeedsUpdate {
+            
+            ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
+                
+                performUIUpdatesOnMain {
+                    self.activityIndicator.stopAnimating()
+                }
+                
+                if successfulOutcome {
+                    
+                    performUIUpdatesOnMain() {
+                        self.map.addAnnotations(self.mapAnnotations)
+                        self.showErrorAlert("Data updated!", alertDescription: "Sorry for the wait, but you now have the most recent data.")
+                    }
+                    
+                    
+                } else {
+                    
+                    performUIUpdatesOnMain() {
+                        self.map.addAnnotations(self.mapAnnotations)
+                        self.showErrorAlert("Data update failed", alertDescription: "Data shown on the map may not be completely up-to-date. Try logging in later.")
+                    }
+                }
+                
+            }
+        } else {
+            self.activityIndicator.stopAnimating()
+            map.addAnnotations(mapAnnotations)
+        }
         
     }
     
@@ -92,6 +122,29 @@ class MapVC: UIViewController {
         }
     }
     
+    // MARK: - Helpers
+    
+    private func showLoadingIndicator() {
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        
+        self.activityIndicator.startAnimating()
+        
+    }
+    
+    private func showErrorAlert(alertTitle: String, alertDescription: String) {
+        
+        let alertView = UIAlertController(title: "\(alertTitle)", message: "\(alertDescription)", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertView.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        
+        self.presentViewController(alertView, animated: true, completion: nil)
+    }
+    
     
     
     
@@ -100,19 +153,21 @@ class MapVC: UIViewController {
 extension MapVC: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        
         let identifier = "Student"
+        
         var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
         
         if annotationView == nil {
-            //4
+            
             annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView!.canShowCallout = true
             
-            // 5
             let btn = UIButton(type: .DetailDisclosure)
             annotationView!.rightCalloutAccessoryView = btn
+            
         } else {
-            // 6
+            
             annotationView!.annotation = annotation
         }
         
@@ -122,14 +177,15 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
+        /* For debugging only
         // What came with the annotationView?
         print("\n *** calloutAccessoryControlTapped has been called *** ")
         //print(self.studentInfo.first)
         
         // Found it!
         print(view.annotation?.subtitle)
+         */
         
-        // TODO: use the subtitle to link to the right web address
         
         if let webLink = view.annotation?.subtitle {
             print("Here is the web link: ")

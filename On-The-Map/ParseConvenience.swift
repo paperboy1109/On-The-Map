@@ -80,6 +80,7 @@ extension ParseClient {
                 
             } else {
                 print("Failed to get data from the parsed result")
+                completionHandlerForDownloadData(outcome: false)
             }
             
             DataService.instance.studentInfoUpdated()

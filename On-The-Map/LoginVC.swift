@@ -30,6 +30,7 @@ class LoginVC: UIViewController {
         
         DataService.instance.resetStudentInfo()
         DataService.instance.setUserNameUnknown()
+        DataService.instance.studentInfoIsOutdated()
         
     }
     
@@ -115,29 +116,32 @@ class LoginVC: UIViewController {
     
     private func allowLogin() {
         
-        ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
+        if DataService.instance.dataNeedsUpdate {
             
-            performUIUpdatesOnMain {
-                self.activityIndicator.stopAnimating()
-            }
-            
-            if successfulOutcome {
+            ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
                 
-                // Segue to the next view controller
                 performUIUpdatesOnMain {
-                    self.disableUI()
-                    let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
-                    self.presentViewController(tabView, animated: true, completion: nil)
                     self.activityIndicator.stopAnimating()
                 }
                 
-            } else {
-                
-                performUIUpdatesOnMain() {
-                    self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                if successfulOutcome {
+                    
+                    // Segue to the next view controller
+                    performUIUpdatesOnMain {
+                        self.disableUI()
+                        let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
+                        self.presentViewController(tabView, animated: true, completion: nil)
+                        self.activityIndicator.stopAnimating()
+                    }
+                    
+                } else {
+                    
+                    performUIUpdatesOnMain() {
+                        self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
+                    }
                 }
+                
             }
-            
         }
         
     }
