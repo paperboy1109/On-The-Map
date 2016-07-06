@@ -63,6 +63,10 @@ class InputVC: UIViewController {
                 
                 if !error {
                     DataService.instance.setUserNameKnown()
+                } else {
+                    performUIUpdatesOnMain() {
+                        self.showErrorAlert("Unable to retrieve your user info", alertDescription: "Sorry, you will not be able to post new information at this time.  Please try again later.")
+                    }
                 }
             }
         }
@@ -101,6 +105,8 @@ class InputVC: UIViewController {
         
         locationTextField.text = nil
         
+        findLocationTappedBtn.enabled = true
+        
         let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
         self.presentViewController(tabView, animated: true, completion: nil)
     }
@@ -109,6 +115,9 @@ class InputVC: UIViewController {
     @IBAction func findOnMapTapped(sender: AnyObject) {
         
         showLoadingIndicator()
+        
+        findLocationTappedBtn.enabled = false
+        
         //Example of successful geolocation
         //CLGeocoder().geocodeAddressString("San Francisco, USA") { (placemarks, error) in
         
@@ -116,6 +125,7 @@ class InputVC: UIViewController {
         //CLGeocoder().geocodeAddressString("kdksladkfsakdfjksadf;jasd") { (placemarks, error) in
         
         if (locationTextField.text == "" || locationTextField.text == nil) {
+            findLocationTappedBtn.enabled = true
             self.showErrorAlert("No location entered", alertDescription: "Please enter your location.  Example: San Francisco, USA")
         } else {
             CLGeocoder().geocodeAddressString(locationTextField.text!) { (placemarks, error) in
