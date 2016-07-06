@@ -40,13 +40,13 @@ class ParseClient: NSObject {
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 print("The request returned a status code other than 2xx!")
-                sendError("Unable to login. Please check your Udacity name and password and try again.")
+                sendError("Failed to download data. Please try again later.")
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                sendError("No data was returned by the request!")
+                sendError("Sorry, no data was returned from the network.  Please try again later.")
                 return
             }
             
@@ -92,7 +92,8 @@ class ParseClient: NSObject {
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
+                print("Your request returned a status code other than 2xx!")
+                sendError("Unable to upload your data. Please try again later.")
                 return
             }
             
