@@ -118,14 +118,16 @@ class LoginVC: UIViewController {
         
         if DataService.instance.dataNeedsUpdate {
             
-            ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
+            ParseClient.sharedInstance().downloadDataFromParse() { (error, errorDesc) in
+                
+                print("(Closure for downloadDataFromParse) error:")
+                print(error)
                 
                 performUIUpdatesOnMain {
                     self.activityIndicator.stopAnimating()
                 }
                 
-                if successfulOutcome {
-                    
+                if !error {
                     // Segue to the next view controller
                     performUIUpdatesOnMain {
                         self.disableUI()
@@ -133,9 +135,8 @@ class LoginVC: UIViewController {
                         self.presentViewController(tabView, animated: true, completion: nil)
                         self.activityIndicator.stopAnimating()
                     }
-                    
-                } else {
-                    
+                } else {                    
+                    print(errorDesc)
                     performUIUpdatesOnMain() {
                         self.showErrorAlert("Login failed", alertDescription: "There was an error with your request.  Please try again later.")
                     }

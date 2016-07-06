@@ -25,7 +25,6 @@ extension ParseClient {
         taskForPOSTMethod(mutableMethod, parameters: urlParameters,jsonBody: jsonBody) { (results, error) in
             
             
-            
             /* Send the desired value(s) to completion handler */
             if let error = error {
                 completionHandlerForPosting(result: nil, error: error)
@@ -35,12 +34,12 @@ extension ParseClient {
                     
                     // For debugging
                     /*
-                    print("\n(see postToServer func definition) Here is 'results' ")
-                    print(results)
-                    */
+                     print("\n(see postToServer func definition) Here is 'results' ")
+                     print(results)
+                     */
                     
                     completionHandlerForPosting(result: postResult, error: nil)
-
+                    
                     
                 } else {
                     completionHandlerForPosting(result: nil, error: NSError(domain: "postToServer parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToServer"]))
@@ -49,7 +48,7 @@ extension ParseClient {
         }
     }
     
-    func downloadDataFromParse(completionHandlerForDownloadData: (outcome: Bool) -> Void) {
+    func downloadDataFromParse(completionHandlerForDownloadData: (error: Bool, errorDesc: NSError?) -> Void) {
         
         let mutableMethod: String = ParseClient.Methods.Method_STUDENT_LOCATION
         
@@ -57,25 +56,49 @@ extension ParseClient {
         urlParameters[ParseClient.ParameterKeys.StudentInfoLimit] = ParseClient.ParameterValues.StudentInfoLimit
         urlParameters[ParseClient.ParameterKeys.StudentInfoOrder] = ParseClient.ParameterValues.StudentInfoOrder
         
-        ParseClient.sharedInstance().taskForGETMethod(mutableMethod, parameters: urlParameters) { (results, error) in
+        /* Make the request */
+        taskForGETMethod(mutableMethod, parameters: urlParameters) { (results, error) in
             
-            if let apiData = results[ParseClient.JSONResponseKeys.APIResults] as? [[String: AnyObject]] {
-                
-                // (studentInfo will be an array of StudentInformation objects)
-                let studentInfo = StudentInformation.studentInfoFromResults(apiData)
-                DataService.instance.updateParseData(studentInfo)
-                
-                // Reverse the order of the data (if needed)
-                //DataService.instance.reverseDataOrder()
-                
+            print("(Closure, taskForGETMethod) error:")
+            print(error)
+            print(results)
+            print(results.count)
+            print(results.dynamicType)
+            
+            /* Send the desired value(s) to completion handler */
+            if let error = error {
+                completionHandlerForDownloadData(error: true, errorDesc: error)
             } else {
-                print("Failed to get data from the parsed result")
-                completionHandlerForDownloadData(outcome: false)
+                
+                if let apiData = results[ParseClient.JSONResponseKeys.APIResults] as? [[String: AnyObject]] {
+                    
+                    print("Here is apiData.count")
+                    print(apiData.count)
+                    
+                    if apiData.count > 0 {
+                        let studentInfo = StudentInformation.studentInfoFromResults(apiData)
+                        DataService.instance.updateParseData(studentInfo)
+                        DataService.instance.studentInfoUpdated()
+                        completionHandlerForDownloadData(error: false, errorDesc: nil)
+                    } else {
+                        // (login will fail)
+                        let studentInfo = StudentInformation.studentInfoFromResults(apiData)
+                        DataService.instance.updateParseData(studentInfo)
+                        DataService.instance.studentInfoUpdated()
+                        completionHandlerForDownloadData(error: true, errorDesc: nil)
+                    }
+                    
+                    // Reverse the order of the data (if needed)
+                    //DataService.instance.reverseDataOrder()
+                    
+                } else {
+                    print("Failed to get data from the parsed result")
+                    DataService.instance.studentInfoIsOutdated()
+                    completionHandlerForDownloadData(error: true, errorDesc: nil)
+                }                
             }
             
-            DataService.instance.studentInfoUpdated()
             
-            completionHandlerForDownloadData(outcome: true)
             
         }
     }

@@ -36,21 +36,18 @@ class TableVC: UIViewController {
         
         if DataService.instance.dataNeedsUpdate {
             
-            ParseClient.sharedInstance().downloadDataFromParse() { (successfulOutcome) in
+            ParseClient.sharedInstance().downloadDataFromParse() { (error, errorDesc) in
                 
                 performUIUpdatesOnMain {
                     self.activityIndicator.stopAnimating()
                 }
                 
-                if successfulOutcome {
-                    
+                if !error {
                     performUIUpdatesOnMain() {
                         self.showErrorAlert("Data updated!", alertDescription: "Sorry for the wait, but you now have the most recent data.")
-                    }
-                    
-                    
+                    }                    
                 } else {
-                    
+                    print(errorDesc)
                     performUIUpdatesOnMain() {
                         self.showErrorAlert("Data update failed", alertDescription: "Data shown in the table may not be completely up-to-date. Try logging in later.")
                     }
