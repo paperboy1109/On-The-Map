@@ -21,8 +21,7 @@ class InputVC: UIViewController {
     
     let locationTextAttributes = [
         NSForegroundColorAttributeName: UIColor.whiteColor(),
-        NSFontAttributeName: UIFont(name: "HelveticaNeue-Light", size: 17)!,
-        // NSStrokeWidthAttributeName: -5
+        NSFontAttributeName: UIFont(name: "HelveticaNeue-Light", size: 17)!
     ]
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
@@ -50,9 +49,6 @@ class InputVC: UIViewController {
         disableUI()
         showLoadingIndicator()
         
-        // TODO: Create a function that the map,table, and input views can all use to see if user data needs to be loaded.
-        // UdacityClient.sharedInstance().ensureUserNameKnown()
-        
         if DataService.instance.userNameKnown() {
             self.activityIndicator.stopAnimating()
             self.enableUI()
@@ -60,12 +56,14 @@ class InputVC: UIViewController {
             
             UdacityClient.sharedInstance().getUserName() { (error, errorDesc) in
                 
-                self.activityIndicator.stopAnimating()
-                self.enableUI()
+                performUIUpdatesOnMain() {
+                    self.activityIndicator.stopAnimating()
+                    self.enableUI()
+                }
                 
                 if !error {
                     DataService.instance.setUserNameKnown()
-                }                
+                }
             }
         }
     }
@@ -162,16 +160,15 @@ class InputVC: UIViewController {
     }
     
     // MARK: - Helpers
+    
     func setPlaceholderText(textField: UITextField, initialText: String) {
         
         textField.text = ""
         
         textField.attributedPlaceholder = NSAttributedString(string: initialText, attributes: locationTextAttributes)
         
-        
     }
     
-    // TODO: Deprecated?
     private func showLoadingIndicator() {
         
         activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))

@@ -59,9 +59,6 @@ extension ParseClient {
                 
                 if let apiData = results[ParseClient.JSONResponseKeys.APIResults] as? [[String: AnyObject]] {
                     
-                    print("Here is apiData.count")
-                    print(apiData.count)
-                    
                     if apiData.count > 0 {
                         let studentInfo = StudentInformation.studentInfoFromResults(apiData)
                         DataService.instance.updateParseData(studentInfo)
