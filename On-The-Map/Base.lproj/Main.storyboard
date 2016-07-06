@@ -22,8 +22,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ogo-DV-TMB">
                                 <rect key="frame" x="20" y="55" width="560" height="527"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Udacity_Logo_White" translatesAutoresizingMaskIntoConstraints="NO" id="3rS-nl-fKI">
-                                        <rect key="frame" x="88" y="0.0" width="385" height="120"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Udacity_Logo_White" translatesAutoresizingMaskIntoConstraints="NO" id="3rS-nl-fKI">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="120" id="O8U-Vs-cth"/>
                                         </constraints>
@@ -95,7 +95,7 @@
                                                     <constraint firstAttribute="width" constant="76" id="ZTI-Y2-uPo"/>
                                                     <constraint firstAttribute="height" constant="48" id="vLb-c0-3KN"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
                                                 <state key="normal" title="Sign Up">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
