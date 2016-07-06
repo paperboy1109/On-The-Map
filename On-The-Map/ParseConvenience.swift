@@ -31,13 +31,6 @@ extension ParseClient {
             } else {
                 if let postResult = results["objectId"] {
                     
-                    
-                    // For debugging
-                    /*
-                     print("\n(see postToServer func definition) Here is 'results' ")
-                     print(results)
-                     */
-                    
                     completionHandlerForPosting(result: postResult, error: nil)
                     
                     
@@ -58,12 +51,6 @@ extension ParseClient {
         
         /* Make the request */
         taskForGETMethod(mutableMethod, parameters: urlParameters) { (results, error) in
-            
-            print("(Closure, taskForGETMethod) error:")
-            print(error)
-            print(results)
-            print(results.count)
-            print(results.dynamicType)
             
             /* Send the desired value(s) to completion handler */
             if let error = error {
