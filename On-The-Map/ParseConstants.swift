@@ -27,7 +27,7 @@ extension ParseClient {
     struct Methods {
         
         // MARK: - Both GET and POST
-        static let Method_STUDENT_LOCATION = "/classes/StudentLocationGARBAGE"
+        static let Method_STUDENT_LOCATION = "/classes/StudentLocation"
         
     }
     
