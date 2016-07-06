@@ -106,6 +106,7 @@ class InputVC: UIViewController {
         locationTextField.text = nil
         
         findLocationTappedBtn.enabled = true
+        findLocationTappedBtn.hidden = false
         
         let tabView = self.storyboard!.instantiateViewControllerWithIdentifier("MapAndTableTabBarController") as! UITabBarController
         self.presentViewController(tabView, animated: true, completion: nil)
@@ -117,6 +118,7 @@ class InputVC: UIViewController {
         showLoadingIndicator()
         
         findLocationTappedBtn.enabled = false
+        findLocationTappedBtn.hidden = true
         
         //Example of successful geolocation
         //CLGeocoder().geocodeAddressString("San Francisco, USA") { (placemarks, error) in
@@ -126,6 +128,7 @@ class InputVC: UIViewController {
         
         if (locationTextField.text == "" || locationTextField.text == nil) {
             findLocationTappedBtn.enabled = true
+            findLocationTappedBtn.hidden = false
             self.showErrorAlert("No location entered", alertDescription: "Please enter your location.  Example: San Francisco, USA")
         } else {
             CLGeocoder().geocodeAddressString(locationTextField.text!) { (placemarks, error) in
